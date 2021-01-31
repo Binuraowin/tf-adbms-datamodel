@@ -42,3 +42,19 @@ train_input_fn = make_input_fn(dftrain, y_train)  # here we will call the input_
 eval_input_fn = make_input_fn(dfeval, y_eval, num_epochs=1, shuffle=False)
 
 linear_est = tf.estimator.LinearClassifier(feature_columns=feature_columns)
+
+result = list(linear_est.predict(eval_input_fn))
+print(dfeval.loc[0])
+print(y_eval)
+print(result[0]['probabilities'][0])
+
+linear_est.train(eval_input_fn)  # train
+result = linear_est.evaluate(eval_input_fn)  # get model metrics/stats by testing on tetsing data
+
+clear_output()  # clears consoke output
+print(result['accuracy'])  # the result variable is simply a dict of stats about our model
+
+pred_dicts = list(linear_est.predict(eval_input_fn))
+probs = pd.Series([pred['probabilities'][1] for pred in pred_dicts])
+
+probs.plot(kind='hist', bins=20, title='predicted probabilities')
