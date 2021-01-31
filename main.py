@@ -19,3 +19,12 @@ print(dftrain.head())
 
 y_train = dftrain.pop('paid')
 y_eval = dfeval.pop('paid')
+
+dftrain.PaymentAmount.hist(bins=10)
+
+dftrain.ICode.value_counts().plot(kind='barh')
+dftrain['RepID'].value_counts().plot(kind='barh')
+
+pd.concat([dftrain, y_train], axis=1).groupby('RepID').PaymentAmount.mean().plot(kind='barh').set_xlabel('% PaymentAmount')
+
+dftrain['ICode'].value_counts().plot(kind='barh')
